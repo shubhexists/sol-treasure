@@ -37,7 +37,7 @@ pub struct IntializeStruct <'info> {
 
 impl <'info> IntializeStruct <'info>  {
 
-      pub fn gamestateset(&mut self,gameduration:u64) -> Result<()> {
+      pub fn gamestateset(&mut self,seed:u64,gameduration:u64,currentfee:u64,state_bump:u8,pool_bump:u8) -> Result<()> {
 
         require!(gameduration > 119, TreasureError::InvalidGameDuration);
 
@@ -45,17 +45,22 @@ impl <'info> IntializeStruct <'info>  {
         let current_time = clock.unix_timestamp as u64;
         
         self.game_state.set_inner(Treasure 
-            { winner_pubkey: self.signer.key(),
+            { 
+             creator: self.signer.key(),
+              winner_pubkey: self.signer.key(),
               last_transaction: current_time, 
-              current_fee: 100_000_000, 
+              current_fee: currentfee,
               total_transactions: 0, 
               game_duration: gameduration, 
-              game_status: true
+              game_status: true,
+              seed: seed,
+              state_bump: state_bump,
+              pool_bump: pool_bump
              });
 
+             // 120 second // tab time - last > duration 
         Ok(())
       } 
-
 
       pub fn startgame(&self, initialamount:u64) -> Result<()>{
         
@@ -72,4 +77,14 @@ impl <'info> IntializeStruct <'info>  {
 
             Ok(())
       }
+}
+
+
+
+pub fn handler(ctx:Context<IntializeStruct>,seed:u64, gameduration:u64,currentfee:u64,initialamount:u64) -> Result<()>{
+
+      ctx.accounts.gamestateset(seed,gameduration,currentfee,ctx.bumps.game_state,ctx.bumps.treasure_pool)?;
+      ctx.accounts.startgame(initialamount)?;
+
+      Ok(())
 }

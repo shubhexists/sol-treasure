@@ -10,6 +10,6 @@ pub enum TreasureError {
     InvalidFee,
     #[msg("Invalid initial amount it should be greater then 2 sol")]
     InvalidInitialAmount,
-    #[msg("Invalid mint")]
-    InvalidMint,
+    #[msg("Invalid creator account")]
+    InvalidCreator,
 }
