@@ -51,7 +51,6 @@ impl <'info> ParticpantStruct <'info> {
       require!(self.signer.lamports() > self.game_state.current_fee, TreasureError::InvalidFee);
 
 
-
        let clock = Clock::get()?;
        let current_time = clock.unix_timestamp as u64;
 

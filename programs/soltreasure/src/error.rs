@@ -13,5 +13,7 @@ pub enum TreasureError {
     #[msg("Invalid creator account")]
     InvalidCreator,
     #[msg("Game is not active anymore")]
-    GameNotActive
+    GameNotActive,
+    #[msg("Game is still active you can not claim")]
+    GameIsActive
 }

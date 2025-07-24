@@ -1,8 +1,8 @@
-mod close;
+mod claim;
 mod initialize;
 mod participate;
 
 
-use close::*;
+use claim::*;
 use initialize::*;
 use participate::*;
