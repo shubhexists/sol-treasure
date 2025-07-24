@@ -49,7 +49,7 @@ pub struct ClaimStruct <'info> {
 
 impl <'info> ClaimStruct <'info> {
     
- pub fn claim(&self,seed:u64) -> Result<()>{
+ pub fn claim(&self) -> Result<()>{
     
     require!(self.game_state.game_status == true, TreasureError::GameIsActive);
 
@@ -74,4 +74,11 @@ impl <'info> ClaimStruct <'info> {
         )
 
     }
+}
+
+
+pub fn handler(ctx:Context<ClaimStruct>) -> Result<()>{
+    ctx.accounts.claim()?;
+    
+    Ok(())
 }

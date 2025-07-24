@@ -82,5 +82,9 @@ impl <'info> ParticpantStruct <'info> {
 }
 
 
+pub fn handler(ctx:Context<ParticpantStruct>) -> Result<()>{
+    ctx.accounts.participate()?;
 
+    Ok(())
+}
 
