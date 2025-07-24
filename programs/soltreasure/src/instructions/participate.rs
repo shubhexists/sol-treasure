@@ -45,10 +45,20 @@ pub struct ParticpantStruct <'info> {
 
 impl <'info> ParticpantStruct <'info> {
 
- pub fn participate(&self) -> Result<()> {
-      
+ pub fn participate(&mut self) -> Result<()> {
+
+      require!(self.game_state.game_status == true, TreasureError::GameNotActive);
       require!(self.signer.lamports() > self.game_state.current_fee, TreasureError::InvalidFee);
 
+
+
+       let clock = Clock::get()?;
+       let current_time = clock.unix_timestamp as u64;
+
+       let time_elapsed = current_time - self.game_state.last_transaction;
+
+       require!(time_elapsed > self.game_state.game_duration,TreasureError::GameNotActive);
+     
       transfer(CpiContext::new(
         self.system_program.to_account_info(), 
         Transfer { 
@@ -56,6 +66,17 @@ impl <'info> ParticpantStruct <'info> {
             to: self.treasure_pool.to_account_info() 
         }
       ), self.game_state.current_fee)?;
+
+     
+      // updating the config
+
+     let clock = Clock::get()?;
+     self.game_state.last_transaction = clock.unix_timestamp as u64;
+
+     self.game_state.winner_pubkey = self.signer.key();
+     self.game_state.total_transactions += 1;
+     self.game_state.current_fee = self.game_state.current_fee * 2;
+
 
       Ok(())
  }

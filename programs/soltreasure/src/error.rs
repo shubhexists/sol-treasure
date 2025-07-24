@@ -12,4 +12,6 @@ pub enum TreasureError {
     InvalidInitialAmount,
     #[msg("Invalid creator account")]
     InvalidCreator,
+    #[msg("Game is not active anymore")]
+    GameNotActive
 }
