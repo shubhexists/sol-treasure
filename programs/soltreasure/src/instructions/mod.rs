@@ -1,8 +1,8 @@
-mod claim;
-mod initialize;
-mod participate;
+pub mod claim;
+pub mod initialize;
+pub mod participate;
 
 
-use claim::*;
-use initialize::*;
-use participate::*;
+pub use claim::*;
+pub use initialize::*;
+pub use participate::*;
